@@ -84,3 +84,24 @@ derivaDe( house, musica_electronica ).
 
 % Consultas
 derivaA( X, Y ):- derivaDe( Y, X ).
+
+% Reglas
+
+% 1. Influencias directas e indirectas
+influencias(X, Y) :- derivaDe(X, Y).
+influencias(X, Y) :- derivaDe(X, Z), influencias(Z, Y).
+
+% 2. Derivados directos e indirectos
+derivados(X, Y) :- derivaDe(Y, X).
+derivados(X, Y) :- derivaDe(Z, X), derivados(Z, Y).
+
+% 3. Relación entre géneros (comparten alguna influencia)
+relacionados(X, Y) :- influencias(X, Z), influencias(Y, Z).
+relacionados(X, Y) :- derivados(X, Z), derivados(Y, Z).
+
+% 4. Ancestro común más cercano
+ancestro_comun(X, Y, Z) :- influencias(X, Z), influencias(Y, Z).
+
+% 5. Distancia entre géneros (en pasos de derivación)
+distancia(X, Y, 1) :- derivaDe(X, Y).
+distancia(X, Y, D) :- derivaDe(X, Z), distancia(Z, Y, D1), D is D1 + 1.
