@@ -105,3 +105,54 @@ ancestro_comun(X, Y, Z) :- influencias(X, Z), influencias(Y, Z).
 % 5. Distancia entre géneros (en pasos de derivación)
 distancia(X, Y, 1) :- derivaDe(X, Y).
 distancia(X, Y, D) :- derivaDe(X, Z), distancia(Z, Y, D1), D is D1 + 1.
+
+% Menú interactivo
+menu :- 
+    write('Seleccione una opción:'), nl,
+    write('1. Influencias directas e indirectas'), nl,
+    write('2. Derivados directos e indirectos'), nl,
+    write('3. Relación entre géneros'), nl,
+    write('4. Ancestro común más cercano'), nl,
+    write('5. Distancia entre géneros'), nl,
+    write('6. Salir'), nl,
+    read(Opcion),
+    manejar_opcion(Opcion).
+
+manejar_opcion(1) :-
+    write('Ingrese el género X: '),
+    read(X),
+    write('Ingrese el género Y: '),
+    read(Y),
+    ( influencias(X, Y) -> write('X influye en Y.'); write('X no influye en Y.') ),
+    nl, menu.
+manejar_opcion(2) :-
+    write('Ingrese el género X: '),
+    read(X),
+    write('Ingrese el género Y: '),
+    read(Y),
+    ( derivados(X, Y) -> write('X es derivado de Y.'); write('X no es derivado de Y.') ),
+    nl, menu.
+manejar_opcion(3) :-
+    write('Ingrese el género X: '),
+    read(X),
+    write('Ingrese el género Y: '),
+    read(Y),
+    ( relacionados(X, Y) -> write('X y Y están relacionados.'); write('X y Y no están relacionados.') ),
+    nl, menu.
+manejar_opcion(4) :-
+    write('Ingrese el género X: '),
+    read(X),
+    write('Ingrese el género Y: '),
+    read(Y),
+    ( ancestro_comun(X, Y, Z) -> format('El ancestro común más cercano es: ~w', [Z]); write('No hay ancestro común.') ),
+    nl, menu.
+manejar_opcion(5) :-
+    write('Ingrese el género X: '),
+    read(X),
+    write('Ingrese el género Y: '),
+    read(Y),
+    ( distancia(X, Y, D) -> format('La distancia entre X y Y es: ~w', [D]); write('No hay relación entre los géneros.') ),
+    nl, menu.
+manejar_opcion(6) :- write('Saliendo...'), nl.
+
+:- initialization(menu).
